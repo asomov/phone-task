@@ -1,0 +1,17 @@
+
+entity Phone {
+    name String required unique 
+}
+
+Entity Booking {
+    bookedOn Instant required,
+    returnedOn Instant
+}
+
+relationship OneToMany {
+    Phone to Booking{phone}
+    User to Booking{owner}
+}
+
+
+service all with serviceClass
