@@ -1,0 +1,86 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-phone-heading" data-cy="PhoneCreateUpdateHeading">Create or edit a Phone</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_brand">Brand</label>
+          <input type="text" class="form-control" name="brand" id="field_brand" data-cy="brand" formControlName="brand" />
+          <div *ngIf="editForm.get('brand')!.invalid && (editForm.get('brand')!.dirty || editForm.get('brand')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('brand')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_device">Device</label>
+          <input type="text" class="form-control" name="device" id="field_device" data-cy="device" formControlName="device" />
+          <div *ngIf="editForm.get('device')!.invalid && (editForm.get('device')!.dirty || editForm.get('device')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('device')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_bookedOn">Booked On</label>
+          <div class="d-flex">
+            <input
+              id="field_bookedOn"
+              data-cy="bookedOn"
+              type="datetime-local"
+              class="form-control"
+              name="bookedOn"
+              formControlName="bookedOn"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_bookedBy">Booked By</label>
+          <select
+            class="form-control"
+            id="field_bookedBy"
+            data-cy="bookedBy"
+            name="bookedBy"
+            formControlName="bookedBy"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

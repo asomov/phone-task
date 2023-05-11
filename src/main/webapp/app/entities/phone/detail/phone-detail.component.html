@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="phone">
+      <h2 data-cy="phoneDetailsHeading"><span>Phone</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ phone.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ phone.name }}</span>
+        </dd>
+        <dt><span>Brand</span></dt>
+        <dd>
+          <span>{{ phone.brand }}</span>
+        </dd>
+        <dt><span>Device</span></dt>
+        <dd>
+          <span>{{ phone.device }}</span>
+        </dd>
+        <dt><span>Booked On</span></dt>
+        <dd>
+          <span>{{ phone.bookedOn | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Booked By</span></dt>
+        <dd>
+          <span>{{ phone.bookedBy?.id }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/phone', phone.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

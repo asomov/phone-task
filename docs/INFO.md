@@ -28,7 +28,7 @@ Apply JDL:
 Follow [the process:](https://www.jhipster.tech/creating-an-entity/#jhipster-uml-and-jdl-studio)
 
     docker exec -it jhipster bash
-    khipster jdl docs/jhipster-jdl.jdl
+    khipster jdl docs/jhipster-jdl-inplace.jdl
 
 
 Stop JHipster

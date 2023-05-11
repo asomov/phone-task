@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20230512091008",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "phone",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "brand",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "device",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "bookedOn",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Phone",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "phone",
+      "relationshipName": "bookedBy",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}
