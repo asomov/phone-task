@@ -1,0 +1,77 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="somov (generated)" id="1683884534550-1">
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1001"/>
+            <column name="name" value="Samsung Galaxy S9"/>
+            <column name="brand" value="Samsung"/>
+            <column name="device" value="Galaxy S9"/>
+            <column name="booked_on" valueDate="2023-05-10T09:33:00"/>
+            <column name="booked_by_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1002"/>
+            <column name="name" value="2x Samsung Galaxy S8"/>
+            <column name="brand" value="Samsung"/>
+            <column name="device" value="Galaxy S8"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1003"/>
+            <column name="name" value="Motorola Nexus 6"/>
+            <column name="brand" value="Motorola"/>
+            <column name="device" value="Nexus 6"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1004"/>
+            <column name="name" value="Oneplus 9"/>
+            <column name="brand" value="OnePlus"/>
+            <column name="device" value="9"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1005"/>
+            <column name="name" value="Apple iPhone 13"/>
+            <column name="brand" value="Apple"/>
+            <column name="device" value="iPhone 13"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1006"/>
+            <column name="name" value="Apple iPhone 12"/>
+            <column name="brand" value="Apple"/>
+            <column name="device" value="iPhone 12"/>
+            <column name="booked_on" valueDate="2023-05-02T23:39:00"/>
+            <column name="booked_by_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1007"/>
+            <column name="name" value="Apple iPhone 11"/>
+            <column name="brand" value="Apple"/>
+            <column name="device" value="iPhone 11"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1008"/>
+            <column name="name" value="iPhone X"/>
+            <column name="brand" value="Apple"/>
+            <column name="device" value="iPhone X"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+        <insert tableName="phone">
+            <column name="id" valueNumeric="1009"/>
+            <column name="name" value="Nokia 3310"/>
+            <column name="brand" value="Nokia"/>
+            <column name="device" value="3310"/>
+            <column name="booked_on"/>
+            <column name="booked_by_id"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
