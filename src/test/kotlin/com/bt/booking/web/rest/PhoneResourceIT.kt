@@ -1,37 +1,29 @@
 package com.bt.booking.web.rest
 
-
 import com.bt.booking.IntegrationTest
 import com.bt.booking.domain.Phone
 import com.bt.booking.repository.PhoneRepository
-import kotlin.test.assertNotNull
+import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers.hasItem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.Validator
-import javax.persistence.EntityManager
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Random
 import java.util.concurrent.atomic.AtomicLong
-import java.util.stream.Stream
-
-import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers.hasItem
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-
-
+import javax.persistence.EntityManager
+import kotlin.test.assertNotNull
 
 /**
  * Integration tests for the [PhoneResource] REST controller.
@@ -52,17 +44,13 @@ class PhoneResourceIT {
     @Autowired
     private lateinit var validator: Validator
 
-
     @Autowired
     private lateinit var em: EntityManager
-
 
     @Autowired
     private lateinit var restPhoneMockMvc: MockMvc
 
     private lateinit var phone: Phone
-
-
 
     @BeforeEach
     fun initTest() {
@@ -178,15 +166,16 @@ class PhoneResourceIT {
         phoneRepository.saveAndFlush(phone)
 
         // Get all the phoneList
-        restPhoneMockMvc.perform(get(ENTITY_API_URL+ "?sort=id,desc"))
+        restPhoneMockMvc.perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(phone.id?.toInt())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].brand").value(hasItem(DEFAULT_BRAND)))
             .andExpect(jsonPath("$.[*].device").value(hasItem(DEFAULT_DEVICE)))
-            .andExpect(jsonPath("$.[*].bookedOn").value(hasItem(DEFAULT_BOOKED_ON.toString())))    }
-    
+            .andExpect(jsonPath("$.[*].bookedOn").value(hasItem(DEFAULT_BOOKED_ON.toString())))
+    }
+
     @Test
     @Transactional
     @Throws(Exception::class)
@@ -205,7 +194,8 @@ class PhoneResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.brand").value(DEFAULT_BRAND))
             .andExpect(jsonPath("$.device").value(DEFAULT_DEVICE))
-            .andExpect(jsonPath("$.bookedOn").value(DEFAULT_BOOKED_ON.toString()))    }
+            .andExpect(jsonPath("$.bookedOn").value(DEFAULT_BOOKED_ON.toString()))
+    }
     @Test
     @Transactional
     @Throws(Exception::class)
@@ -253,11 +243,12 @@ class PhoneResourceIT {
         val databaseSizeBeforeUpdate = phoneRepository.findAll().size
         phone.id = count.incrementAndGet()
 
-
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPhoneMockMvc.perform(put(ENTITY_API_URL_ID, phone.id)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(phone)))
+        restPhoneMockMvc.perform(
+            put(ENTITY_API_URL_ID, phone.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonBytes(phone))
+        )
             .andExpect(status().isBadRequest)
 
         // Validate the Phone in the database
@@ -292,9 +283,11 @@ class PhoneResourceIT {
         phone.id = count.incrementAndGet()
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPhoneMockMvc.perform(put(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonBytes(phone)))
+        restPhoneMockMvc.perform(
+            put(ENTITY_API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonBytes(phone))
+        )
             .andExpect(status().isMethodNotAllowed)
 
         // Validate the Phone in the database
@@ -307,32 +300,31 @@ class PhoneResourceIT {
     @Throws(Exception::class)
     fun partialUpdatePhoneWithPatch() {
         phoneRepository.saveAndFlush(phone)
-        
-        
-val databaseSizeBeforeUpdate = phoneRepository.findAll().size
+
+        val databaseSizeBeforeUpdate = phoneRepository.findAll().size
 
 // Update the phone using partial update
-val partialUpdatedPhone = Phone().apply {
-    id = phone.id
+        val partialUpdatedPhone = Phone().apply {
+            id = phone.id
 
-    
-        device = UPDATED_DEVICE
-}
+            device = UPDATED_DEVICE
+        }
 
-
-restPhoneMockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdatedPhone.id)
-.contentType("application/merge-patch+json")
-.content(convertObjectToJsonBytes(partialUpdatedPhone)))
-.andExpect(status().isOk)
+        restPhoneMockMvc.perform(
+            patch(ENTITY_API_URL_ID, partialUpdatedPhone.id)
+                .contentType("application/merge-patch+json")
+                .content(convertObjectToJsonBytes(partialUpdatedPhone))
+        )
+            .andExpect(status().isOk)
 
 // Validate the Phone in the database
-val phoneList = phoneRepository.findAll()
-assertThat(phoneList).hasSize(databaseSizeBeforeUpdate)
-val testPhone = phoneList.last()
-    assertThat(testPhone.name).isEqualTo(DEFAULT_NAME)
-    assertThat(testPhone.brand).isEqualTo(DEFAULT_BRAND)
-    assertThat(testPhone.device).isEqualTo(UPDATED_DEVICE)
-    assertThat(testPhone.bookedOn).isEqualTo(DEFAULT_BOOKED_ON)
+        val phoneList = phoneRepository.findAll()
+        assertThat(phoneList).hasSize(databaseSizeBeforeUpdate)
+        val testPhone = phoneList.last()
+        assertThat(testPhone.name).isEqualTo(DEFAULT_NAME)
+        assertThat(testPhone.brand).isEqualTo(DEFAULT_BRAND)
+        assertThat(testPhone.device).isEqualTo(UPDATED_DEVICE)
+        assertThat(testPhone.bookedOn).isEqualTo(DEFAULT_BOOKED_ON)
     }
 
     @Test
@@ -340,35 +332,34 @@ val testPhone = phoneList.last()
     @Throws(Exception::class)
     fun fullUpdatePhoneWithPatch() {
         phoneRepository.saveAndFlush(phone)
-        
-        
-val databaseSizeBeforeUpdate = phoneRepository.findAll().size
+
+        val databaseSizeBeforeUpdate = phoneRepository.findAll().size
 
 // Update the phone using partial update
-val partialUpdatedPhone = Phone().apply {
-    id = phone.id
+        val partialUpdatedPhone = Phone().apply {
+            id = phone.id
 
-    
-        name = UPDATED_NAME
-        brand = UPDATED_BRAND
-        device = UPDATED_DEVICE
-        bookedOn = UPDATED_BOOKED_ON
-}
+            name = UPDATED_NAME
+            brand = UPDATED_BRAND
+            device = UPDATED_DEVICE
+            bookedOn = UPDATED_BOOKED_ON
+        }
 
-
-restPhoneMockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdatedPhone.id)
-.contentType("application/merge-patch+json")
-.content(convertObjectToJsonBytes(partialUpdatedPhone)))
-.andExpect(status().isOk)
+        restPhoneMockMvc.perform(
+            patch(ENTITY_API_URL_ID, partialUpdatedPhone.id)
+                .contentType("application/merge-patch+json")
+                .content(convertObjectToJsonBytes(partialUpdatedPhone))
+        )
+            .andExpect(status().isOk)
 
 // Validate the Phone in the database
-val phoneList = phoneRepository.findAll()
-assertThat(phoneList).hasSize(databaseSizeBeforeUpdate)
-val testPhone = phoneList.last()
-    assertThat(testPhone.name).isEqualTo(UPDATED_NAME)
-    assertThat(testPhone.brand).isEqualTo(UPDATED_BRAND)
-    assertThat(testPhone.device).isEqualTo(UPDATED_DEVICE)
-    assertThat(testPhone.bookedOn).isEqualTo(UPDATED_BOOKED_ON)
+        val phoneList = phoneRepository.findAll()
+        assertThat(phoneList).hasSize(databaseSizeBeforeUpdate)
+        val testPhone = phoneList.last()
+        assertThat(testPhone.name).isEqualTo(UPDATED_NAME)
+        assertThat(testPhone.brand).isEqualTo(UPDATED_BRAND)
+        assertThat(testPhone.device).isEqualTo(UPDATED_DEVICE)
+        assertThat(testPhone.bookedOn).isEqualTo(UPDATED_BOOKED_ON)
     }
 
     @Throws(Exception::class)
@@ -377,9 +368,11 @@ val testPhone = phoneList.last()
         phone.id = count.incrementAndGet()
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPhoneMockMvc.perform(patch(ENTITY_API_URL_ID, phone.id)
-            .contentType("application/merge-patch+json")
-            .content(convertObjectToJsonBytes(phone)))
+        restPhoneMockMvc.perform(
+            patch(ENTITY_API_URL_ID, phone.id)
+                .contentType("application/merge-patch+json")
+                .content(convertObjectToJsonBytes(phone))
+        )
             .andExpect(status().isBadRequest)
 
         // Validate the Phone in the database
@@ -395,9 +388,11 @@ val testPhone = phoneList.last()
         phone.id = count.incrementAndGet()
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPhoneMockMvc.perform(patch(ENTITY_API_URL_ID, count.incrementAndGet())
-            .contentType("application/merge-patch+json")
-            .content(convertObjectToJsonBytes(phone)))
+        restPhoneMockMvc.perform(
+            patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                .contentType("application/merge-patch+json")
+                .content(convertObjectToJsonBytes(phone))
+        )
             .andExpect(status().isBadRequest)
 
         // Validate the Phone in the database
@@ -413,9 +408,11 @@ val testPhone = phoneList.last()
         phone.id = count.incrementAndGet()
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPhoneMockMvc.perform(patch(ENTITY_API_URL)
-            .contentType("application/merge-patch+json")
-            .content(convertObjectToJsonBytes(phone)))
+        restPhoneMockMvc.perform(
+            patch(ENTITY_API_URL)
+                .contentType("application/merge-patch+json")
+                .content(convertObjectToJsonBytes(phone))
+        )
             .andExpect(status().isMethodNotAllowed)
 
         // Validate the Phone in the database
@@ -441,7 +438,6 @@ val testPhone = phoneList.last()
         assertThat(phoneList).hasSize(databaseSizeBeforeDelete - 1)
     }
 
-
     companion object {
 
         private const val DEFAULT_NAME = "AAAAAAAAAA"
@@ -456,15 +452,11 @@ val testPhone = phoneList.last()
         private val DEFAULT_BOOKED_ON: Instant = Instant.ofEpochMilli(0L)
         private val UPDATED_BOOKED_ON: Instant = Instant.now().truncatedTo(ChronoUnit.MILLIS)
 
-
         private val ENTITY_API_URL: String = "/api/phones"
         private val ENTITY_API_URL_ID: String = ENTITY_API_URL + "/{id}"
 
         private val random: Random = Random()
-        private val count: AtomicLong = AtomicLong(random.nextInt().toLong() + ( 2 * Integer.MAX_VALUE ))
-
-
-
+        private val count: AtomicLong = AtomicLong(random.nextInt().toLong() + (2 * Integer.MAX_VALUE))
 
         /**
          * Create an entity for this test.
@@ -484,7 +476,6 @@ val testPhone = phoneList.last()
                 bookedOn = DEFAULT_BOOKED_ON
 
             )
-
 
             return phone
         }
@@ -508,9 +499,7 @@ val testPhone = phoneList.last()
 
             )
 
-
             return phone
         }
-
     }
 }

@@ -1,10 +1,8 @@
 package com.bt.booking.domain
 
-import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat
 import com.bt.booking.web.rest.equalsVerifier
-
-import java.util.UUID
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 class PhoneTest {
 
