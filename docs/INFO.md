@@ -10,13 +10,13 @@ Start JHipster
 
     docker-compose -f docs/docker-compose-jhipster.yaml up
 
-Connect to the container to install KHipster:
+Connect to the container to install KHipster as root:
 
     docker exec -it --user root jhipster bash
     npm install -g generator-jhipster-kotlin
     exit
 
-Connect to use KHipster:
+Connect to use KHipster as normal user to avoid locking local files:
 
     docker exec -it jhipster bash
     khipster --skip-fake-data
