@@ -40,7 +40,7 @@ Stop JHipster
 Launch the infra:
 
     cd src/main/docker
-    docker-compose -f infra.yml up
+    docker-compose -f postgresql.yml up
 
 Launch App with initial data (make sure you use Java 11):
 
