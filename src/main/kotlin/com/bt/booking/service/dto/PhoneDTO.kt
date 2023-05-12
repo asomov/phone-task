@@ -2,6 +2,7 @@ package com.bt.booking.service.dto
 
 import com.bt.booking.domain.Phone
 import com.bt.booking.domain.User
+import com.bt.booking.service.FonoResponse
 import java.io.Serializable
 import java.time.Instant
 
@@ -26,5 +27,21 @@ data class PhoneDTO(
     ) : this(
         phone.id!!, phone.name!!, phone.brand!!,
         phone.device!!, phone.bookedOn, phone.bookedBy, technology, bands2g, bands3g, bands4g
+    )
+
+    constructor(
+        phone: Phone,
+        fonoResponse: FonoResponse,
+    ) : this(
+        phone.id!!,
+        phone.name!!,
+        phone.brand!!,
+        phone.device!!,
+        phone.bookedOn,
+        phone.bookedBy,
+        fonoResponse.technology,
+        fonoResponse.bands2g,
+        fonoResponse.bands3g,
+        fonoResponse.bands4g
     )
 }

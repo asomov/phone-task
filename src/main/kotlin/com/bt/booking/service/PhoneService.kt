@@ -15,6 +15,7 @@ import java.util.*
 @Transactional
 class PhoneService(
     private val phoneRepository: PhoneRepository,
+    private val fonoapiService: FonoapiService,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -106,6 +107,16 @@ class PhoneService(
     }
 
     fun enrich(phone: Phone): PhoneDTO {
-        return PhoneDTO(phone, "", "", "", "")
+        val fonodata = try {
+            fonoapiService.callFonoapi(phone.brand!!, phone.device!!)
+        } catch (e: Exception) {
+            FonoResponse(
+                "Not available",
+                "Not available",
+                "Not available",
+                "Not available"
+            )
+        }
+        return PhoneDTO(phone, fonodata)
     }
 }
