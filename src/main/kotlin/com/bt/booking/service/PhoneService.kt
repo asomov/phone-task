@@ -2,10 +2,11 @@ package com.bt.booking.service
 
 import com.bt.booking.domain.Phone
 import com.bt.booking.repository.PhoneRepository
+import com.bt.booking.service.dto.PhoneDTO
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
+import java.util.*
 
 /**
  * Service Implementation for managing [Phone].
@@ -76,9 +77,9 @@ class PhoneService(
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    fun findAll(): MutableList<Phone> {
+    fun findAll(): List<PhoneDTO> {
         log.debug("Request to get all Phones")
-        return phoneRepository.findAll()
+        return phoneRepository.findAll().map { ph -> enrich(ph) }
     }
 
     /**
@@ -88,9 +89,9 @@ class PhoneService(
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    fun findOne(id: Long): Optional<Phone> {
+    fun findOne(id: Long): Optional<PhoneDTO> {
         log.debug("Request to get Phone : $id")
-        return phoneRepository.findById(id)
+        return phoneRepository.findById(id).map { ph -> enrich(ph) }
     }
 
     /**
@@ -102,5 +103,9 @@ class PhoneService(
         log.debug("Request to delete Phone : $id")
 
         phoneRepository.deleteById(id)
+    }
+
+    fun enrich(phone: Phone): PhoneDTO {
+        return PhoneDTO(phone, "", "", "", "")
     }
 }

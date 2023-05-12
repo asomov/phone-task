@@ -3,6 +3,7 @@ package com.bt.booking.web.rest
 import com.bt.booking.domain.Phone
 import com.bt.booking.repository.PhoneRepository
 import com.bt.booking.service.PhoneService
+import com.bt.booking.service.dto.PhoneDTO
 import com.bt.booking.web.rest.errors.BadRequestAlertException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -140,7 +141,7 @@ class PhoneResource(
 
      * @return the [ResponseEntity] with status `200 (OK)` and the list of phones in body.
      */
-    @GetMapping("/phones") fun getAllPhones(): MutableList<Phone> {
+    @GetMapping("/phones") fun getAllPhones(): List<PhoneDTO> {
 
         log.debug("REST request to get all Phones")
 
@@ -154,7 +155,7 @@ class PhoneResource(
      * @return the [ResponseEntity] with status `200 (OK)` and with body the phone, or with status `404 (Not Found)`.
      */
     @GetMapping("/phones/{id}")
-    fun getPhone(@PathVariable id: Long): ResponseEntity<Phone> {
+    fun getPhone(@PathVariable id: Long): ResponseEntity<PhoneDTO> {
         log.debug("REST request to get Phone : $id")
         val phone = phoneService.findOne(id)
         return ResponseUtil.wrapOrNotFound(phone)
