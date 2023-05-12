@@ -49,7 +49,7 @@ Launch App with initial data (make sure you use Java 11):
 
 Stop infra:
 
-    docker-compose -f infra.yml down --volumes
+    docker-compose -f postgresql.yml down --volumes
 
 
 
